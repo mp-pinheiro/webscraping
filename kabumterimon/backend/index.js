@@ -44,7 +44,7 @@ async function fetch(res) {
     }
 };
 
-process = (req, res) => {
+exports.process = (req, res) => {
     res.set('Access-Control-Allow-Origin', 'https://kabumterimon.uc.r.appspot.com');
     res.set('Access-Control-Allow-Credentials', 'true');
 
