@@ -34,8 +34,7 @@ async function fetch(res) {
             Promise.all(promises)
                 .then((result) => {
                     var data = JSON.stringify(result, null, 4);
-                    // res.send(data)
-                    console.log(data)
+                    res.send(data)
                 })
                 .catch(err => console.log(`Error in promises ${err}`))
         });
