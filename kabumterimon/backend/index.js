@@ -34,7 +34,8 @@ async function fetch(res) {
             Promise.all(promises)
                 .then((result) => {
                     var data = JSON.stringify(result, null, 4);
-                    res.send(data)
+                    // res.send(data)
+                    console.log(data)
                 })
                 .catch(err => console.log(`Error in promises ${err}`))
         });
@@ -43,6 +44,18 @@ async function fetch(res) {
     }
 };
 
-exports.process = (req, res) => {
-    fetch(res);
+process = (req, res) => {
+    res.set('Access-Control-Allow-Origin', 'https://kabumterimon.uc.r.appspot.com');
+    res.set('Access-Control-Allow-Credentials', 'true');
+
+    if (req.method === 'OPTIONS') {
+        res.set('Access-Control-Allow-Methods', 'GET');
+        res.set('Access-Control-Allow-Headers', 'Authorization');
+        res.set('Access-Control-Max-Age', '3600');
+        res.status(204).send('');
+    } else {
+        fetch(res);
+    }
 };
+
+process();
