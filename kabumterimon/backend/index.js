@@ -57,5 +57,3 @@ process = (req, res) => {
         fetch(res);
     }
 };
-
-process();
