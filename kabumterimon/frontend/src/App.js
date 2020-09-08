@@ -5,6 +5,15 @@ import Table from "./Table";
 import "./App.css";
 import logo from "./logo.png";
 
+// Custom component to render Genres 
+const Links = (value) => {
+    // Loop through the array and create a badge-like component instead of a comma-separated string
+    console.log(value);
+    return (
+        <a href={value.url} target="_blank" rel="noopener noreferrer">Link</a>
+    );
+};
+
 function App() {
     const columns = useMemo(
         () => [
@@ -17,7 +26,7 @@ function App() {
                     },
                     {
                         Header: "Preço Total",
-                        accessor: "preco"
+                        accessor: "preco_real"
                     },
                     {
                         Header: "Preço Desconto",
@@ -29,7 +38,8 @@ function App() {
                     },
                     {
                         Header: "Link",
-                        accessor: 'link_descricao'
+                        accessor: 'link_descricao',
+                        Cell: ({ cell: { value } }) => <Links url={value} />
                     }
                 ]
             }
@@ -41,7 +51,12 @@ function App() {
 
     useEffect(() => {
         (async () => {
-            const result = await axios("https://us-central1-kabumterimon.cloudfunctions.net/kabumterimon");
+            const result = await axios.get("https://us-central1-kabumterimon.cloudfunctions.net/kabumterimon",
+                {
+                    "headers": {
+                        'Content-Type': 'text/plain'
+                    }
+                });
 
             // format to a single array instead of one per page
             var tmp = result.data;
@@ -50,14 +65,19 @@ function App() {
                 page.forEach(function (product) {
                     // check if object is interesting
                     if (Object.keys(product['oferta']).length && product['disponibilidade'] && !product['is_marketplace']) {
+                        // get actual price
+                        product['preco_real'] = Math.max(product['preco'], product['preco_antigo']);
+
                         // calculate discount
-                        product['desconto_percentual'] = Math.round(100.0 * (product['preco'] - product['preco_desconto']) / product['preco']);
+                        product['desconto_percentual'] = Math.round(100.0 * (product['preco_real'] - product['preco_desconto']) / product['preco_real']) + "%";
+
+                        // fix link
+                        product['link_descricao'] = "https://kabum.com.br/" + product['link_descricao']
+
                         formattedData.push(product);
                     }
                 }, this);
             }, this);
-
-            console.log(formattedData);
 
             setData(formattedData);
         })();
