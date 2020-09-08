@@ -8,7 +8,6 @@ import logo from "./logo.png";
 // Custom component to render Genres 
 const Links = (value) => {
     // Loop through the array and create a badge-like component instead of a comma-separated string
-    console.log(value);
     return (
         <a href={value.url} target="_blank" rel="noopener noreferrer">Link</a>
     );
