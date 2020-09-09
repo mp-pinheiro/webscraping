@@ -6,7 +6,4 @@ steps:
   '--trigger-http',
   '--entry-point=process',
   '--project=kabumterimon',
-  "--set-env-vars=\
-  GCLOUD_CLOUDRUN_ENDPOINT=$_GCLOUD_CLOUDRUN_ENDPOINT,\
-  GCLOUD_TOPIC=$_GCLOUD_TOPIC",
   '--timeout=300']
