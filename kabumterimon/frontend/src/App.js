@@ -50,10 +50,10 @@ function App() {
 
     useEffect(() => {
         (async () => {
-            const result = await axios.get("https://us-central1-kabumterimon.cloudfunctions.net/kabumterimon",
+            const result = await axios.get("https://storage.googleapis.com/download/storage/v1/b/kbt-products-landing/o/results.json?generation=1599689476267844&alt=media",
                 {
                     "headers": {
-                        'Content-Type': 'text/plain'
+                        'Content-Type': 'application/json'
                     }
                 });
 
