@@ -7,3 +7,4 @@ steps:
   '--entry-point=process',
   '--project=kabumterimon',
   '--timeout=300']
+  dir: kabumterimon/backend
