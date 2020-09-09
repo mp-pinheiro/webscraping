@@ -1,8 +1,10 @@
 steps:
   - name: 'gcr.io/cloud-builders/npm'  
     args: ['install']
+    dir: kabumterimon/frontend
   - name: 'gcr.io/cloud-builders/npm'  
     args: ['run', 'build']
+    dir: kabumterimon/frontend
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['app', 'deploy']
     timeout: '1600s'
