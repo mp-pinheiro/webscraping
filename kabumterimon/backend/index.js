@@ -1,8 +1,23 @@
 const fs = require('fs');
+const { Storage } = require('@google-cloud/storage');
 const pageScraper = require('./pageScraper');
+
+const storage = new Storage();
+const bucketName = 'kbt-products-landing';
+const filename = '/tmp/results.json';
 
 function min(a, b) {
     return a < b ? a : b;
+}
+
+async function uploadFile() {
+    await storage.bucket(bucketName).upload(filename, {
+        metadata: {
+            cacheControl: 'public, max-age=31536000',
+        },
+    });
+
+    console.log(`${filename} uploaded to ${bucketName}.`);
 }
 
 async function fetch(res) {
@@ -34,9 +49,11 @@ async function fetch(res) {
             Promise.all(promises)
                 .then((result) => {
                     var data = JSON.stringify(result, null, 4);
-                    res.send(data)
+                    fs.writeFileSync(filename, data);
+                    uploadFile().catch(console.error);
+                    res.status(200).send(data);
                 })
-                .catch(err => console.log(`Error in promises ${err}`))
+                .catch(err => console.error(`Error in promises ${err}`))
         });
     } catch (e) {
         console.log('Error', e);
@@ -44,15 +61,5 @@ async function fetch(res) {
 };
 
 exports.process = (req, res) => {
-    res.set('Access-Control-Allow-Origin', 'https://kabumterimon.uc.r.appspot.com');
-    res.set('Access-Control-Allow-Credentials', 'true');
-
-    if (req.method === 'OPTIONS') {
-        res.set('Access-Control-Allow-Methods', 'GET');
-        res.set('Access-Control-Allow-Headers', 'Authorization');
-        res.set('Access-Control-Max-Age', '3600');
-        res.status(204).send('');
-    } else {
-        fetch(res);
-    }
+    fetch(res);
 };
