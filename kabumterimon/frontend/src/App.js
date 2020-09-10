@@ -50,7 +50,7 @@ function App() {
 
     useEffect(() => {
         (async () => {
-            const result = await axios.get("https://storage.googleapis.com/download/storage/v1/b/kbt-products-landing/o/results.json?generation=1599689476267844&alt=media",
+            const result = await axios.get("https://storage.googleapis.com/download/storage/v1/b/kbt-products-landing/o/results.json?alt=media",
                 {
                     "headers": {
                         'Content-Type': 'application/json'
